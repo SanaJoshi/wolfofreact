@@ -10,3 +10,11 @@ export function loadQuoteForStock(symbol){
     return  res.data
   });
 }
+
+export function loadLogoForSymbol(symbol){
+                
+  return api.get(`/stock/${symbol}/logo`)
+  .then((res)=>{
+    return res.data
+  });
+}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import StockInfo from './components/StockInfo';
-import { loadQuoteForStock } from './api/iex';
+import { loadQuoteForStock, loadLogoForSymbol } from './api/iex';
 
 
 
@@ -10,12 +10,14 @@ class App extends Component {
     symbol: 'B',
     isValid: true,
     quote: null,
+    logo: null,
     hasError: false
   }
 
   componentDidMount(){
     console.log("I am in componentDidMount");
     this.loadQuote()
+    this.loadLogo()
   }
 
   componentDidUpdate(){
@@ -35,6 +37,20 @@ class App extends Component {
     })
   }
 
+  loadLogo() {
+    console.log("I am in the class");
+    loadLogoForSymbol(this.state.symbol)
+    .then((logo)=> {
+      console.log(logo)
+      this.setState({logo: logo.url })
+    })
+    .catch((err)=> {
+      console.log(err)
+      this.setState({hasError: true});
+    })
+  }
+
+
   handleSymbolChange = (event) => {
     // const target = event.target;
     // console.log("target is", target);
@@ -47,6 +63,7 @@ class App extends Component {
   handleButtonClick = (event) => {
     console.log(event.target);
     this.loadQuote();
+    this.loadLogo();
   }
 
 
@@ -74,6 +91,8 @@ class App extends Component {
         />
         <button onClick={ this.handleButtonClick }>Get this sana</button>
         <StockInfo {...this.state.quote}/>
+
+        <img src={this.state.logo} />
 
       </div>
     )
